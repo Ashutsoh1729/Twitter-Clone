@@ -4,11 +4,12 @@ import { useCallback, useState } from "react";
 
 import useLoginModal from "@/hooks/useLoginModal";
 import useResisterModal from "@/hooks/useResisterModal";
-
+import { signIn } from "next-auth/react";
 
 import Input from "../Input";
 import Modal from "../Modal";
-import { log } from "console";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const ResisterModal = () => {
   const loginModal = useLoginModal();
@@ -36,16 +37,37 @@ const ResisterModal = () => {
     try {
       setIsLoading(true);
 
+      
+      
       // TODO ADD RESISTER AND LOGIN
-
+      await axios.post("/api/resister", {
+        email,
+        password,
+        username,
+        name
+      });
+      toast.success("Account Created Successfully")
+      
+      signIn("credentials", {
+        email,
+        password
+      });
+      
+      // To make everyting empty after the user hitting the submit button
+      setEmail("");
+      setPassword("");
+      setName("");
+      setUsername("");
+      
       resisterModal.onClose();
     } catch (error) {
       console.log(error);
+      toast.error("Something went wrong")
       
     } finally {
       setIsLoading(false);
     }
-  }, [resisterModal]);
+  }, [resisterModal,email,password,username,name]);  // Error shows here as i have not added the dev dependencies at the end
 
 
 

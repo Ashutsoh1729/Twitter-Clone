@@ -32,6 +32,10 @@ const LoginModal = () => {
       setIsLoading(true);
 
       loginModal.onClose();
+
+      setEmail("");
+      setPassword("");
+
     } catch (error) {
       console.log(error);
       
